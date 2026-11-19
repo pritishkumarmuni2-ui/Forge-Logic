@@ -1,8 +1,9 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const outputFile = 'project-map.txt';
-const projectRoot = './'; 
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
 // Folders/Files to ignore
 const ignore = ['node_modules', '.next', '.git', '.sanity', 'package-lock.json', '.gitignore'];
@@ -11,7 +12,7 @@ const skipExtensions = ['.ico', '.png', '.jpg', '.jpeg', '.svg', '.gif'];
 
 function getFiles(dir, fileList = []) {
   const files = fs.readdirSync(dir);
-  files.forEach(file => {
+  files.forEach((file) => {
     if (ignore.includes(file)) return;
     const filePath = path.join(dir, file);
 
@@ -30,15 +31,15 @@ function getFiles(dir, fileList = []) {
 const allFiles = getFiles(projectRoot);
 let output = 'PROJECT CODE MAP (Assets Excluded)\n==================================\n\n';
 
-allFiles.forEach(file => {
-  output += `\n--- FILE: ${file} ---\n`;
+allFiles.forEach((file) => {
+  output += `\n--- FILE: ${path.relative(projectRoot, file)} ---\n`;
   try {
     output += fs.readFileSync(file, 'utf8');
-  } catch (err) {
+  } catch {
     output += '[Could not read file]';
   }
   output += '\n\n';
 });
 
-fs.writeFileSync(outputFile, output);
+fs.writeFileSync(path.join(projectRoot, outputFile), output);
 console.log(`Success! Your clean code map is saved in ${outputFile}`);

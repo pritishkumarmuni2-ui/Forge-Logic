@@ -58,7 +58,7 @@ ForgeLogic is designed as an **adaptive technical interviewer**, not a general e
 - **Structured Session Summary**: End-of-session review tracking questions answered, demonstrated strengths, concepts needing practice, and overall note.
 - **Local Persistence (`localStorage`)**: Automatic saving and reloading of in-progress sessions, latest summary, and editor code across browser refreshes.
 - **Session Protection**: Modal confirmation prior to discarding an active interview session.
-- **Automated Tests**: 11 unit tests powered by Vitest verifying static analysis, classifier categories, branching logic, and summary generation.
+- **Automated Tests**: 20 unit and smoke tests powered by Vitest verifying static analysis, classifier categories, branching logic, summary generation, storage resilience, and full app render.
 
 ---
 
@@ -87,9 +87,13 @@ In accordance with the build principles of this foundation release:
 ## 📁 Folder Structure
 
 ```
+public/
+└── favicon.svg                 # Brand mark (code brackets in a forge gradient)
 src/
 ├── app/
-│   └── App.tsx                 # Main application shell & tab/layout coordination
+│   ├── App.tsx                 # Main application shell & phase coordination
+│   └── __tests__/
+│       └── app.smoke.test.tsx  # SSR smoke test for the full component tree
 ├── components/
 │   ├── Header.tsx              # Brand header, status indicator & new interview button
 │   ├── ProblemPanel.tsx        # Problem statement, examples & constraints
